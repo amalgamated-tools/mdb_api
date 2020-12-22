@@ -1,0 +1,3 @@
+imdbpie
+fastapi
+uvicorn
