@@ -1,7 +1,7 @@
 # set base image (host OS)
 FROM python:3.8
 
-EXPOSE 80
+EXPOSE 8013
 
 COPY ./app /app
 
