@@ -1,3 +1,4 @@
 imdbpie
 fastapi
 uvicorn
+JustWatch

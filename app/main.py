@@ -3,6 +3,7 @@ from imdbpie import ImdbFacade, Imdb
 from typing import Optional
 from fastapi import FastAPI
 from starlette.requests import Request
+from justwatch import JustWatch
 import os
 import logging
 
@@ -11,6 +12,7 @@ logger = logging.getLogger("fastapi")
 logger.setLevel(logging.DEBUG)
 
 imdb = Imdb()
+just_watch = JustWatch(country='US')
 
 
 @app.get("/")
@@ -75,4 +77,16 @@ def search_title(query: str, request: Request):
             'link': base + '/name/' + p['imdb_id'],
             'name': p['name']
         })
+    return results
+
+
+@app.get("/streaming/providers")
+def justwatch_providers(request: Request):
+    provider_details = just_watch.get_providers()
+    return provider_details
+
+
+@app.get("/streaming/{query}")
+def justwatch_query(query: str, request: Request):
+    results = just_watch.search_for_item(query=query)
     return results
