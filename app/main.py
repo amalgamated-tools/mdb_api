@@ -30,7 +30,10 @@ def get_title(item_id: str):
 def search_title(query: str, request: Request):
     results = []
     base = request.url.scheme + '://' + \
-        request.url.hostname + ':' + str(request.url.port)
+        request.url.hostname
+    if request.url.port != None:
+        base = base + ':' + str(request.url.port)
+
     titles = imdb.search_for_title(query)
     for p in titles:
         results.append({
@@ -38,6 +41,25 @@ def search_title(query: str, request: Request):
             'title': p['title'],
             'link': base + '/title/' + p['imdb_id'],
             'type': p['type'],
+            'year': p['year']
+        })
+    return results
+
+
+@app.get("/popular_movies")
+def popular_movies(request: Request):
+    results = []
+    base = request.url.scheme + '://' + \
+        request.url.hostname
+    if request.url.port != None:
+        base = base + ':' + str(request.url.port)
+    popular = imdb.get_popular_movies()
+    for p in popular["ranks"]:
+        results.append({
+            'id': p['id'],
+            'title': p['title'],
+            'link': base + '/title/' + p['id'],
+            'type': p['titleType'],
             'year': p['year']
         })
     return results
